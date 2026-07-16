@@ -27,7 +27,12 @@
     <div id="sections" class="sections" aria-live="polite"></div>
 
     <button class="add-section editor-only" id="addSection" type="button">＋ 新建分区</button>
-    <p class="readonly-note" id="readonlyNote" hidden>这是在线只读版本。请在本地修改后提交更新。</p>
+    <div class="device-actions" id="deviceActions" hidden>
+      <p id="deviceHint">这是线上公共清单，默认只读。</p>
+      <button class="primary" id="enableDeviceEdit" type="button">在此设备编辑</button>
+      <button id="exportData" type="button" hidden>导出 JSON</button>
+      <button id="resetDevice" type="button" hidden>恢复线上版本</button>
+    </div>
   </main>
 
   <div class="toast" id="toast" role="status"></div>

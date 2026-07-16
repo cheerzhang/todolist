@@ -28,4 +28,6 @@ npm start
 2. 在 **Build and deployment** 下把 **Source** 设为 **GitHub Actions**
 3. 将代码推送到 `main`
 
-Actions 会把 `public` 页面和 `data/todos.json` 组装为静态站点并部署。线上页面始终为只读；本地运行 `npm run dev` 修改任务，确认后提交并推送，线上数据便会随部署更新。
+Actions 会把 `public` 页面和 `data/todos.json` 组装为静态站点并部署。线上仓库数据始终为只读；本地运行 `npm run dev` 修改任务，确认后提交并推送，线上数据便会随部署更新。
+
+线上页面也可以选择“在此设备编辑”。修改保存在浏览器 `localStorage` 中，不会写入仓库或同步到其他设备；页面提供 JSON 导出和恢复线上版本功能。

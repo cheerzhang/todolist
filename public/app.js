@@ -1,4 +1,5 @@
-const state = { data: null, readOnly: true, collapsed: new Set(JSON.parse(localStorage.getItem('collapsed') || '[]')) };
+const DEVICE_DATA_KEY = 'clearlist-device-data';
+const state = { data: null, onlineData: null, readOnly: true, deviceMode: false, staticHosting: false, collapsed: new Set(JSON.parse(localStorage.getItem('collapsed') || '[]')) };
 const $ = id => document.getElementById(id);
 const colors = ['coral', 'blue', 'green', 'gold'];
 
@@ -30,12 +31,46 @@ function render() {
 
 async function save() {
   if (state.readOnly) return;
+  if (state.deviceMode) {
+    state.data.updatedAt = new Date().toISOString();
+    localStorage.setItem(DEVICE_DATA_KEY, JSON.stringify(state.data));
+    toast('已保存到此设备');
+    return;
+  }
   try {
     const response = await fetch('/api/todos', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(state.data) });
     if (!response.ok) throw new Error((await response.json()).error);
     state.data = await response.json(); toast('已保存到 JSON');
   } catch (error) { toast(error.message || '保存失败'); }
 }
+
+function updateDeviceControls() {
+  $('deviceActions').hidden = !state.staticHosting;
+  $('enableDeviceEdit').hidden = state.deviceMode;
+  $('exportData').hidden = !state.deviceMode;
+  $('resetDevice').hidden = !state.deviceMode;
+  $('deviceHint').textContent = state.deviceMode ? '修改只保存在当前浏览器，不会影响公开清单。' : '这是线上公共清单，默认只读。';
+}
+
+$('enableDeviceEdit').addEventListener('click', () => {
+  state.data = structuredClone(state.onlineData);
+  state.deviceMode = true; state.readOnly = false;
+  localStorage.setItem(DEVICE_DATA_KEY, JSON.stringify(state.data));
+  document.body.classList.remove('readonly'); $('mode').textContent = '此设备编辑'; updateDeviceControls(); render(); toast('已开启此设备编辑');
+});
+
+$('resetDevice').addEventListener('click', () => {
+  if (!confirm('清除这个设备上的修改，恢复线上公开清单？')) return;
+  localStorage.removeItem(DEVICE_DATA_KEY); state.data = structuredClone(state.onlineData);
+  state.deviceMode = false; state.readOnly = true;
+  document.body.classList.add('readonly'); $('mode').textContent = '只读浏览'; updateDeviceControls(); render(); toast('已恢复线上版本');
+});
+
+$('exportData').addEventListener('click', () => {
+  const blob = new Blob([`${JSON.stringify(state.data, null, 2)}\n`], { type:'application/json' });
+  const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'todos.json'; link.click();
+  setTimeout(() => URL.revokeObjectURL(link.href), 0); toast('已导出 JSON');
+});
 
 $('sections').addEventListener('click', event => {
   const action = event.target.closest('[data-action]')?.dataset.action; if (!action) return;
@@ -75,10 +110,16 @@ async function init() {
       const staticResponse = await fetch('./data/todos.json', { cache:'no-store' });
       if (!staticResponse.ok) throw new Error('数据读取失败');
       todos = await staticResponse.json();
-      config = { readOnly:true };
+      config = { readOnly:true }; state.staticHosting = true;
     }
-    state.readOnly = config.readOnly; state.data = todos;
-    document.body.classList.toggle('readonly', state.readOnly); $('mode').textContent = state.readOnly ? '只读浏览' : '本地编辑'; $('readonlyNote').hidden = !state.readOnly;
+    state.onlineData = structuredClone(todos);
+    const saved = state.staticHosting ? localStorage.getItem(DEVICE_DATA_KEY) : null;
+    if (saved) {
+      try { state.data = JSON.parse(saved); state.deviceMode = true; state.readOnly = false; }
+      catch { localStorage.removeItem(DEVICE_DATA_KEY); state.data = todos; state.readOnly = config.readOnly; }
+    } else { state.readOnly = config.readOnly; state.data = todos; }
+    document.body.classList.toggle('readonly', state.readOnly);
+    $('mode').textContent = state.deviceMode ? '此设备编辑' : state.readOnly ? '只读浏览' : '本地编辑'; updateDeviceControls();
     render();
   } catch { $('sections').innerHTML = '<p class="empty">清单加载失败，请稍后重试。</p>'; $('mode').textContent = '加载失败'; }
 }
