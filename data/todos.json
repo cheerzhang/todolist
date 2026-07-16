@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-16T06:54:54.433Z",
+  "updatedAt": "2026-07-16T07:31:25.956Z",
   "sections": [
     {
       "id": "today",
@@ -7,14 +7,29 @@
       "color": "coral",
       "todos": [
         {
-          "id": "welcome",
-          "text": "欢迎使用你的清单",
+          "id": "mrn6jpyo-jsdwy",
+          "text": "购物-owala水杯",
           "done": false
         },
         {
-          "id": "tip",
-          "text": "点击任务即可标记完成",
-          "done": true
+          "id": "mrn6k620-e03rc",
+          "text": "购物-速干小毛巾-要便携袋的那种",
+          "done": false
+        },
+        {
+          "id": "mrn6ki30-3p4z6",
+          "text": "购物-各种油盐酱醋花生酱",
+          "done": false
+        },
+        {
+          "id": "mrn6lr3z-g6bou",
+          "text": "购物-野餐垫坐垫沙滩垫-可收纳的版本",
+          "done": false
+        },
+        {
+          "id": "mrn6m0d0-gxmhk",
+          "text": "购物-头饰-安全小巧的版本",
+          "done": false
         }
       ]
     },
@@ -24,8 +39,8 @@
       "color": "blue",
       "todos": [
         {
-          "id": "first-plan",
-          "text": "整理下一步计划",
+          "id": "mrn6xabi-qfmk2",
+          "text": "购物-充电宝-大号的",
           "done": false
         }
       ]
