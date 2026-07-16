@@ -1,0 +1,34 @@
+{
+  "updatedAt": "2026-07-16T06:54:54.433Z",
+  "sections": [
+    {
+      "id": "today",
+      "title": "今天",
+      "color": "coral",
+      "todos": [
+        {
+          "id": "welcome",
+          "text": "欢迎使用你的清单",
+          "done": false
+        },
+        {
+          "id": "tip",
+          "text": "点击任务即可标记完成",
+          "done": true
+        }
+      ]
+    },
+    {
+      "id": "later",
+      "title": "之后再做",
+      "color": "blue",
+      "todos": [
+        {
+          "id": "first-plan",
+          "text": "整理下一步计划",
+          "done": false
+        }
+      ]
+    }
+  ]
+}

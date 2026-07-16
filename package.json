@@ -1,0 +1,12 @@
+{
+  "name": "clearlist",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node server.js",
+    "start": "READ_ONLY=true node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
