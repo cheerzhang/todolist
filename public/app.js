@@ -4,6 +4,7 @@ const $ = id => document.getElementById(id);
 const colors = ['coral', 'blue', 'green', 'gold'];
 
 function uid() { return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`; }
+function cloneData(value) { return JSON.parse(JSON.stringify(value)); }
 function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 function toast(message) { const el = $('toast'); el.textContent = message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer = setTimeout(() => el.classList.remove('show'), 1800); }
 
@@ -53,7 +54,7 @@ function updateDeviceControls() {
 }
 
 $('enableDeviceEdit').addEventListener('click', () => {
-  state.data = structuredClone(state.onlineData);
+  state.data = cloneData(state.onlineData);
   state.deviceMode = true; state.readOnly = false;
   localStorage.setItem(DEVICE_DATA_KEY, JSON.stringify(state.data));
   document.body.classList.remove('readonly'); $('mode').textContent = '此设备编辑'; updateDeviceControls(); render(); toast('已开启此设备编辑');
@@ -61,7 +62,7 @@ $('enableDeviceEdit').addEventListener('click', () => {
 
 $('resetDevice').addEventListener('click', () => {
   if (!confirm('清除这个设备上的修改，恢复线上公开清单？')) return;
-  localStorage.removeItem(DEVICE_DATA_KEY); state.data = structuredClone(state.onlineData);
+  localStorage.removeItem(DEVICE_DATA_KEY); state.data = cloneData(state.onlineData);
   state.deviceMode = false; state.readOnly = true;
   document.body.classList.add('readonly'); $('mode').textContent = '只读浏览'; updateDeviceControls(); render(); toast('已恢复线上版本');
 });
@@ -112,7 +113,7 @@ async function init() {
       todos = await staticResponse.json();
       config = { readOnly:true }; state.staticHosting = true;
     }
-    state.onlineData = structuredClone(todos);
+    state.onlineData = cloneData(todos);
     const saved = state.staticHosting ? localStorage.getItem(DEVICE_DATA_KEY) : null;
     if (saved) {
       try { state.data = JSON.parse(saved); state.deviceMode = true; state.readOnly = false; }
