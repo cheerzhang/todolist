@@ -91,9 +91,25 @@ $('sections').addEventListener('submit', event => {
   render(); save();
 });
 
-$('addSection').addEventListener('click', () => {
-  const title = prompt('分区名称'); if (!title?.trim()) return;
-  state.data.sections.push({ id:uid(), title:title.trim().slice(0, 30), color:colors[state.data.sections.length % colors.length], todos:[] }); render(); save();
+function toggleSectionComposer(open) {
+  $('sectionComposer').hidden = !open;
+  $('addSection').hidden = open;
+  $('addSection').setAttribute('aria-expanded', String(open));
+  if (open) requestAnimationFrame(() => $('sectionTitle').focus());
+  else $('sectionComposer').reset();
+}
+
+$('addSection').addEventListener('click', () => toggleSectionComposer(true));
+$('cancelSection').addEventListener('click', () => toggleSectionComposer(false));
+$('sectionComposer').addEventListener('submit', event => {
+  event.preventDefault(); if (state.readOnly) return;
+  const title = event.target.elements.title.value.trim();
+  if (!title) { $('sectionTitle').focus(); return; }
+  state.data.sections.push({ id:uid(), title:title.slice(0, 30), color:colors[state.data.sections.length % colors.length], todos:[] });
+  toggleSectionComposer(false); render(); save();
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !$('sectionComposer').hidden) toggleSectionComposer(false);
 });
 
 async function init() {

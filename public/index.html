@@ -29,7 +29,22 @@
 
     <div id="sections" class="sections" aria-live="polite"></div>
 
-    <button class="add-section editor-only" id="addSection" type="button">＋ 新建分区</button>
+    <button class="add-section editor-only" id="addSection" type="button" aria-expanded="false" aria-controls="sectionComposer">
+      <span class="add-section-icon">＋</span>
+      <span><strong>新建分区</strong><small>把不同类型的事情分开整理</small></span>
+    </button>
+    <form class="section-composer editor-only" id="sectionComposer" hidden>
+      <div class="composer-heading">
+        <span class="composer-icon">✦</span>
+        <div><strong>创建新分区</strong><small>给这一组待办起个名字</small></div>
+      </div>
+      <label for="sectionTitle">分区名称</label>
+      <input id="sectionTitle" name="title" maxlength="30" placeholder="例如：旅行准备" autocomplete="off">
+      <div class="composer-actions">
+        <button class="secondary" id="cancelSection" type="button">取消</button>
+        <button class="primary" type="submit">创建分区</button>
+      </div>
+    </form>
     <div class="device-actions" id="deviceActions" hidden>
       <p id="deviceHint">这是线上公共清单，默认只读。</p>
       <button class="primary" id="enableDeviceEdit" type="button">在此设备编辑</button>
@@ -39,6 +54,6 @@
   </main>
 
   <div class="toast" id="toast" role="status"></div>
-  <script src="./app.js?v=20260716-2"></script>
+  <script src="./app.js?v=20260722-1"></script>
 </body>
 </html>

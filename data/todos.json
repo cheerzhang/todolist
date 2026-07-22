@@ -1,21 +1,11 @@
 {
-  "updatedAt": "2026-07-16T07:31:25.956Z",
+  "updatedAt": "2026-07-22T08:41:10.782Z",
   "sections": [
     {
       "id": "today",
       "title": "今天",
       "color": "coral",
       "todos": [
-        {
-          "id": "mrn6jpyo-jsdwy",
-          "text": "购物-owala水杯",
-          "done": false
-        },
-        {
-          "id": "mrn6k620-e03rc",
-          "text": "购物-速干小毛巾-要便携袋的那种",
-          "done": false
-        },
         {
           "id": "mrn6ki30-3p4z6",
           "text": "购物-各种油盐酱醋花生酱",
@@ -24,11 +14,6 @@
         {
           "id": "mrn6lr3z-g6bou",
           "text": "购物-野餐垫坐垫沙滩垫-可收纳的版本",
-          "done": false
-        },
-        {
-          "id": "mrn6m0d0-gxmhk",
-          "text": "购物-头饰-安全小巧的版本",
           "done": false
         }
       ]
@@ -41,6 +26,45 @@
         {
           "id": "mrn6xabi-qfmk2",
           "text": "购物-充电宝-大号的",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "mrvtrvc2-lehch",
+      "title": "尼斯购物清单",
+      "color": "green",
+      "todos": [
+        {
+          "id": "mrvtt7g2-zyw2m",
+          "text": "Nicolas Alziari 橄榄油",
+          "done": false
+        },
+        {
+          "id": "mrvtu2rc-gvu37",
+          "text": "普罗旺斯香皂",
+          "done": false
+        },
+        {
+          "id": "mrvu23ct-yb4jn",
+          "text": "Socca 鹰嘴豆饼",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "mrvtx5uw-7df9w",
+      "title": "尼斯景点清单",
+      "color": "gold",
+      "todos": [
+        {
+          "id": "mrvtx7rf-aw0lw",
+          "text": "Cours Saleya 周一复古市场",
+          "done": false
+        },
+        {
+          "id": "mrvty64x-te0m4",
+          "text": "Cours Saleya 周二普通市场  6:00-14:00",
           "done": false
         }
       ]
