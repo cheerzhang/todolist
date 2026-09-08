@@ -1,33 +1,33 @@
 # Clearlist
 
-一个清晰、移动端友好的分区 Todo List。数据保存在 `data/todos.json`。
+A clean, mobile-friendly to-do list organized into sections. Data is stored in `data/todos.json`.
 
-## 本地编辑
+## Edit locally
 
 ```bash
 npm run dev
 ```
 
-打开 `http://localhost:3000`。添加、完成或删除任务后会自动写回 JSON，之后正常提交并推送代码即可更新线上内容。
+Open `http://localhost:3000`. Adding, completing, or deleting a task automatically writes the changes back to the JSON file. Commit and push the code as usual to update the online version.
 
-## 在线只读
+## Read-only mode
 
 ```bash
 npm start
 ```
 
-`npm start` 会设置 `READ_ONLY=true`，页面隐藏编辑入口，同时服务端拒绝所有写入请求。生产环境设置 `NODE_ENV=production` 也会自动启用只读。
+`npm start` sets `READ_ONLY=true`, hides editing controls, and makes the server reject all write requests. Setting `NODE_ENV=production` also enables read-only mode automatically.
 
-如需指定端口：`PORT=8080 npm run dev`。
+To use a custom port, run `PORT=8080 npm run dev`.
 
-## 部署到 GitHub Pages
+## Deploy to GitHub Pages
 
-仓库已经包含 `.github/workflows/pages.yml`。首次部署需要在 GitHub 仓库中打开：
+The repository already includes `.github/workflows/pages.yml`. For the first deployment, open your GitHub repository and:
 
 1. **Settings → Pages**
-2. 在 **Build and deployment** 下把 **Source** 设为 **GitHub Actions**
-3. 将代码推送到 `main`
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**
+3. Push the code to `main`
 
-Actions 会把 `public` 页面和 `data/todos.json` 组装为静态站点并部署。线上仓库数据始终为只读；本地运行 `npm run dev` 修改任务，确认后提交并推送，线上数据便会随部署更新。
+The workflow assembles the files in `public` and `data/todos.json` into a static site and deploys it. Repository data is always read-only online. To update it, run `npm run dev` locally, edit your tasks, then commit and push the changes.
 
-线上页面也可以选择“在此设备编辑”。修改保存在浏览器 `localStorage` 中，不会写入仓库或同步到其他设备；页面提供 JSON 导出和恢复线上版本功能。
+On the deployed site, you can also choose **Edit on this device**. Changes are saved in the browser's `localStorage`; they are not written to the repository or synced to other devices. The page also lets you export the data as JSON or restore the online version.

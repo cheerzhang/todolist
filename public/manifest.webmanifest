@@ -1,7 +1,7 @@
 {
-  "name": "我的清单",
-  "short_name": "清单",
-  "description": "清晰、简单的分区 Todo List",
+  "name": "My List",
+  "short_name": "My List",
+  "description": "A clean and simple sectioned to-do list",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

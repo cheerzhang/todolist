@@ -25,23 +25,23 @@ const server = http.createServer((req, res) => {
 
   if (url.pathname === '/api/config') return send(res, 200, JSON.stringify({ readOnly }));
   if (url.pathname === '/api/todos' && req.method === 'GET') {
-    return fs.readFile(dataFile, (error, data) => error ? send(res, 500, JSON.stringify({ error: '读取数据失败' })) : send(res, 200, data));
+    return fs.readFile(dataFile, (error, data) => error ? send(res, 500, JSON.stringify({ error: 'Could not read data' })) : send(res, 200, data));
   }
   if (url.pathname === '/api/todos' && req.method === 'PUT') {
-    if (readOnly) return send(res, 403, JSON.stringify({ error: '在线版本为只读模式' }));
+    if (readOnly) return send(res, 403, JSON.stringify({ error: 'The online version is read-only' }));
     let body = '';
     req.on('data', chunk => { body += chunk; if (body.length > 1024 * 1024) req.destroy(); });
     req.on('end', () => {
       try {
         const data = JSON.parse(body);
-        if (!validData(data)) return send(res, 400, JSON.stringify({ error: '数据格式不正确' }));
+        if (!validData(data)) return send(res, 400, JSON.stringify({ error: 'Invalid data format' }));
         data.updatedAt = new Date().toISOString();
         const temp = `${dataFile}.tmp`;
         fs.writeFile(temp, `${JSON.stringify(data, null, 2)}\n`, error => {
-          if (error) return send(res, 500, JSON.stringify({ error: '保存失败' }));
-          fs.rename(temp, dataFile, renameError => renameError ? send(res, 500, JSON.stringify({ error: '保存失败' })) : send(res, 200, JSON.stringify(data)));
+          if (error) return send(res, 500, JSON.stringify({ error: 'Could not save data' }));
+          fs.rename(temp, dataFile, renameError => renameError ? send(res, 500, JSON.stringify({ error: 'Could not save data' })) : send(res, 200, JSON.stringify(data)));
         });
-      } catch { send(res, 400, JSON.stringify({ error: '无效的 JSON' })); }
+      } catch { send(res, 400, JSON.stringify({ error: 'Invalid JSON' })); }
     });
     return;
   }
@@ -56,4 +56,4 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(port, () => console.log(`Clearlist: http://localhost:${port} (${readOnly ? '只读' : '本地可编辑'})`));
+server.listen(port, () => console.log(`Clearlist: http://localhost:${port} (${readOnly ? 'read-only' : 'locally editable'})`));

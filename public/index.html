@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f4f1e9">
-  <title>我的清单</title>
+  <title>My List</title>
   <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="apple-touch-icon" href="./apple-touch-icon.png">
   <link rel="manifest" href="./manifest.webmanifest">
@@ -15,14 +15,14 @@
     <header class="topbar">
       <div>
         <p class="eyebrow">MY DAY</p>
-        <h1>我的清单</h1>
+        <h1>My List</h1>
         <p class="date" id="date"></p>
       </div>
-      <span class="mode" id="mode">读取中</span>
+      <span class="mode" id="mode">Loading</span>
     </header>
 
-    <section class="summary" aria-label="任务概览">
-      <div><strong id="leftCount">0</strong><span>件待完成</span></div>
+    <section class="summary" aria-label="Task overview">
+      <div><strong id="leftCount">0</strong><span>tasks left</span></div>
       <div class="progress"><i id="progressBar"></i></div>
       <span id="percent">0%</span>
     </section>
@@ -31,29 +31,29 @@
 
     <button class="add-section editor-only" id="addSection" type="button" aria-expanded="false" aria-controls="sectionComposer">
       <span class="add-section-icon">＋</span>
-      <span><strong>新建分区</strong><small>把不同类型的事情分开整理</small></span>
+      <span><strong>New section</strong><small>Organize different kinds of tasks</small></span>
     </button>
     <form class="section-composer editor-only" id="sectionComposer" hidden>
       <div class="composer-heading">
         <span class="composer-icon">✦</span>
-        <div><strong>创建新分区</strong><small>给这一组待办起个名字</small></div>
+        <div><strong>Create a new section</strong><small>Name this group of tasks</small></div>
       </div>
-      <label for="sectionTitle">分区名称</label>
-      <input id="sectionTitle" name="title" maxlength="30" placeholder="例如：旅行准备" autocomplete="off">
+      <label for="sectionTitle">Section name</label>
+      <input id="sectionTitle" name="title" maxlength="30" placeholder="For example: Trip preparation" autocomplete="off">
       <div class="composer-actions">
-        <button class="secondary" id="cancelSection" type="button">取消</button>
-        <button class="primary" type="submit">创建分区</button>
+        <button class="secondary" id="cancelSection" type="button">Cancel</button>
+        <button class="primary" type="submit">Create section</button>
       </div>
     </form>
     <div class="device-actions" id="deviceActions" hidden>
-      <p id="deviceHint">这是线上公共清单，默认只读。</p>
-      <button class="primary" id="enableDeviceEdit" type="button">在此设备编辑</button>
-      <button id="exportData" type="button" hidden>导出 JSON</button>
-      <button id="resetDevice" type="button" hidden>恢复线上版本</button>
+      <p id="deviceHint">This public online list is read-only by default.</p>
+      <button class="primary" id="enableDeviceEdit" type="button">Edit on this device</button>
+      <button id="exportData" type="button" hidden>Export JSON</button>
+      <button id="resetDevice" type="button" hidden>Restore online version</button>
     </div>
   </main>
 
   <div class="toast" id="toast" role="status"></div>
-  <script src="./app.js?v=20260722-1"></script>
+  <script src="./app.js?v=20260908-1"></script>
 </body>
 </html>

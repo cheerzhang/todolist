@@ -16,13 +16,13 @@ function render() {
     return `<section class="section ${open ? '' : 'collapsed'}" data-section="${section.id}">
       <button class="section-head" type="button" data-action="toggle" aria-expanded="${open}">
         <i class="dot ${section.color || ''}"></i><span class="section-title">${escapeHtml(section.title)}</span>
-        <span class="section-count">${remaining ? `${remaining} 项待办` : '已完成'}</span><span class="chevron">⌄</span>
+        <span class="section-count">${remaining ? `${remaining} ${remaining === 1 ? 'task' : 'tasks'} left` : 'All done'}</span><span class="chevron">⌄</span>
       </button>
       <ul class="todo-list">${section.todos.length ? section.todos.map(todo => `<li class="todo ${todo.done ? 'done' : ''}" data-todo="${todo.id}">
-        <button class="check" data-action="check" aria-label="${todo.done ? '标记为未完成' : '标记为完成'}"></button>
-        <span class="todo-text">${escapeHtml(todo.text)}</span><button class="delete" data-action="delete" aria-label="删除任务">×</button>
-      </li>`).join('') : '<li class="empty">这里还没有任务</li>'}</ul>
-      <form class="add-row editor-only"><input name="todo" maxlength="120" placeholder="添加一项任务…" aria-label="新任务"><button>添加</button></form>
+        <button class="check" data-action="check" aria-label="${todo.done ? 'Mark as incomplete' : 'Mark as complete'}"></button>
+        <span class="todo-text">${escapeHtml(todo.text)}</span><button class="delete" data-action="delete" aria-label="Delete task">×</button>
+      </li>`).join('') : '<li class="empty">No tasks here yet</li>'}</ul>
+      <form class="add-row editor-only"><input name="todo" maxlength="120" placeholder="Add a task…" aria-label="New task"><button>Add</button></form>
     </section>`;
   }).join('');
   const all = sections.flatMap(section => section.todos); const done = all.filter(todo => todo.done).length;
@@ -35,14 +35,14 @@ async function save() {
   if (state.deviceMode) {
     state.data.updatedAt = new Date().toISOString();
     localStorage.setItem(DEVICE_DATA_KEY, JSON.stringify(state.data));
-    toast('已保存到此设备');
+    toast('Saved to this device');
     return;
   }
   try {
     const response = await fetch('/api/todos', { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(state.data) });
     if (!response.ok) throw new Error((await response.json()).error);
-    state.data = await response.json(); toast('已保存到 JSON');
-  } catch (error) { toast(error.message || '保存失败'); }
+    state.data = await response.json(); toast('Saved to JSON');
+  } catch (error) { toast(error.message || 'Could not save'); }
 }
 
 function updateDeviceControls() {
@@ -50,27 +50,27 @@ function updateDeviceControls() {
   $('enableDeviceEdit').hidden = state.deviceMode;
   $('exportData').hidden = !state.deviceMode;
   $('resetDevice').hidden = !state.deviceMode;
-  $('deviceHint').textContent = state.deviceMode ? '修改只保存在当前浏览器，不会影响公开清单。' : '这是线上公共清单，默认只读。';
+  $('deviceHint').textContent = state.deviceMode ? 'Changes are saved only in this browser and do not affect the public list.' : 'This public online list is read-only by default.';
 }
 
 $('enableDeviceEdit').addEventListener('click', () => {
   state.data = cloneData(state.onlineData);
   state.deviceMode = true; state.readOnly = false;
   localStorage.setItem(DEVICE_DATA_KEY, JSON.stringify(state.data));
-  document.body.classList.remove('readonly'); $('mode').textContent = '此设备编辑'; updateDeviceControls(); render(); toast('已开启此设备编辑');
+  document.body.classList.remove('readonly'); $('mode').textContent = 'Editing on this device'; updateDeviceControls(); render(); toast('Device editing enabled');
 });
 
 $('resetDevice').addEventListener('click', () => {
-  if (!confirm('清除这个设备上的修改，恢复线上公开清单？')) return;
+  if (!confirm('Clear changes on this device and restore the public online list?')) return;
   localStorage.removeItem(DEVICE_DATA_KEY); state.data = cloneData(state.onlineData);
   state.deviceMode = false; state.readOnly = true;
-  document.body.classList.add('readonly'); $('mode').textContent = '只读浏览'; updateDeviceControls(); render(); toast('已恢复线上版本');
+  document.body.classList.add('readonly'); $('mode').textContent = 'Read only'; updateDeviceControls(); render(); toast('Online version restored');
 });
 
 $('exportData').addEventListener('click', () => {
   const blob = new Blob([`${JSON.stringify(state.data, null, 2)}\n`], { type:'application/json' });
   const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'todos.json'; link.click();
-  setTimeout(() => URL.revokeObjectURL(link.href), 0); toast('已导出 JSON');
+  setTimeout(() => URL.revokeObjectURL(link.href), 0); toast('JSON exported');
 });
 
 $('sections').addEventListener('click', event => {
@@ -113,19 +113,19 @@ document.addEventListener('keydown', event => {
 });
 
 async function init() {
-  $('date').textContent = new Intl.DateTimeFormat('zh-CN', { month:'long', day:'numeric', weekday:'long' }).format(new Date());
+  $('date').textContent = new Intl.DateTimeFormat('en', { month:'long', day:'numeric', weekday:'long' }).format(new Date());
   try {
     let config = { readOnly:true }; let todos;
     try {
       const response = await fetch('/api/config');
-      if (!response.ok) throw new Error('静态托管');
+      if (!response.ok) throw new Error('Static hosting');
       config = await response.json();
       const dataResponse = await fetch('/api/todos');
-      if (!dataResponse.ok) throw new Error('数据读取失败');
+      if (!dataResponse.ok) throw new Error('Could not load data');
       todos = await dataResponse.json();
     } catch {
       const staticResponse = await fetch('./data/todos.json', { cache:'no-store' });
-      if (!staticResponse.ok) throw new Error('数据读取失败');
+      if (!staticResponse.ok) throw new Error('Could not load data');
       todos = await staticResponse.json();
       config = { readOnly:true }; state.staticHosting = true;
     }
@@ -136,8 +136,8 @@ async function init() {
       catch { localStorage.removeItem(DEVICE_DATA_KEY); state.data = todos; state.readOnly = config.readOnly; }
     } else { state.readOnly = config.readOnly; state.data = todos; }
     document.body.classList.toggle('readonly', state.readOnly);
-    $('mode').textContent = state.deviceMode ? '此设备编辑' : state.readOnly ? '只读浏览' : '本地编辑'; updateDeviceControls();
+    $('mode').textContent = state.deviceMode ? 'Editing on this device' : state.readOnly ? 'Read only' : 'Local editing'; updateDeviceControls();
     render();
-  } catch { $('sections').innerHTML = '<p class="empty">清单加载失败，请稍后重试。</p>'; $('mode').textContent = '加载失败'; }
+  } catch { $('sections').innerHTML = '<p class="empty">Could not load the list. Please try again later.</p>'; $('mode').textContent = 'Load failed'; }
 }
 init();
